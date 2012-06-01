@@ -1,0 +1,32 @@
+extends layout
+
+block body
+  include shared/form-helpers
+
+  .page-header
+    .center-container: h1 Edit user
+
+  .center-container
+    if (locals.globalError)
+      .alert.alert-error #{globalError}
+    if (locals.saved)
+      .alert.fade.in
+        button.close(data-dismiss='alert') ×
+        |Your changes are successfully saved
+    form.well(method='post', action='/users/#{_id}')
+      input(type="hidden", name="_method", value="put")
+      fieldset
+        +textBox("userName", "User Name", "user name")
+        +textBox("email", "Email", "email")
+        br
+        button.btn.btn-large.btn-primary(type="submit")
+          i.icon-ok.icon-white
+          |&nbsp;Save
+        &nbsp;
+        a(href="/users") Cancel
+
+  script(type='text/javascript')
+    $(function(){
+      $('#userName').focus();
+      $(".alert").alert();
+    });

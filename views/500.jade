@@ -1,0 +1,9 @@
+extends layout
+
+block body
+  .page-header
+    .center-container: h1 500: Server error
+
+  .center-container
+    .alert.alert-error(style='font-size: 18px') #{message}
+    pre(style='font-size: 11px') #{stacktrace}

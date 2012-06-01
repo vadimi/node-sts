@@ -1,0 +1,7 @@
+{
+    "privateKey": "./config/server_private.pem",
+    "publicKey": "./config/server_public.pem",
+    "authCookieName": "stsauth",
+    "dbConnection": "localhost/sts",
+    "appPort": 3000
+}

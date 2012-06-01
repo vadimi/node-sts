@@ -1,0 +1,31 @@
+extends layout
+
+block body
+  include shared/form-helpers
+
+  .page-header
+    .center-container: h1 Sign in
+
+  .center-container
+    p
+      span.label.label-info Note!
+      |&nbsp;You will be redirected to the following url:
+    pre #{sourceUrl}
+
+    if (locals.globalError)
+      .alert.alert-error #{globalError}
+    form.well(method='post', action='/fedlogin?#{query}')
+      fieldset
+        +textBox("userName", "User Name", "user name")
+        +password("password", "Password", "password")
+        br
+        button.btn.btn-large.btn-primary(type="submit")
+          i.icon-lock.icon-white
+          |&nbsp;Login
+        |&nbsp;or&nbsp;
+        a(href="/signup") Register
+
+  script(type='text/javascript')
+    $(function(){
+      $('#userName').focus();
+    });

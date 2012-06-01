@@ -1,0 +1,7 @@
+html
+  title Auto Postback form
+  body(onload='document.forms[0].submit();')
+    form(method='post', action='#{wreply}')
+      input(type='hidden', name='wctx', value='#{wctx}')
+      input(type='hidden', name='wa', value='#{wa}')
+      input(type='hidden', name='wresult', value='#{wresult}')

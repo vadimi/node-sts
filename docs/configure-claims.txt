@@ -1,0 +1,26 @@
+1. Switch SharePoint to Claims:
+
+    $webApp = Get-SPWebApplication "http://sharepoint"
+    $webApp.UseClaimsAuthentication = 1
+    $webApp.Update()
+
+2. Configure Trusted Identity Token Issuer. The same certificate should not be used for production!
+
+    $rootCert = Get-PfxCertificate "d:\certs\server_public.cer"
+    New-SPTrustedRootAuthority -Name "rootca Cert" -Certificate $rootCert
+
+    $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2("d:\certs\server_public.cer")
+    New-SPTrustedRootAuthority -Name "Token Signing Cert" -Certificate $cert
+
+    $realm = "urn:federation:awesome"
+    $map1 = New-SPClaimTypeMapping -IncomingClaimType "http://schemas.xmlsoap.org/claims/upn" -IncomingClaimTypeDisplayName "UPN" -SameAsIncoming
+    $map2 = New-SPClaimTypeMapping -IncomingClaimType "http://schemas.xmlsoap.org/claims/emailAddress" -IncomingClaimTypeDisplayName "emailAddress" –SameAsIncoming
+    $map3 = New-SPClaimTypeMapping -IncomingClaimType "http://schemas.xmlsoap.org/claims/UserDomain" -IncomingClaimTypeDisplayName "UserDomain " -SameAsIncoming
+    $signinurl = "http://localhost:3000/fedlogin"
+    $ap = New-SPTrustedIdentityTokenIssuer -Name "KO SiteMinder" -Description "KO SiteMinder Add-on" -Realm $realm -ImportTrustCertificate $cert -ClaimsMappings $map1, $map2, $map3 -SignInUrl $signinurl -IdentifierClaim $map1.InputClaimType -UseWReply
+
+3. Configure LogonTokenCacheExpirationWindow
+
+    $sts = Get-SPSecurityTokenServiceConfig
+    $sts.LogonTokenCacheExpirationWindow = (New-TimeSpan –minutes 1)
+    $sts.Update()

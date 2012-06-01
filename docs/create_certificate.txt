@@ -1,0 +1,3 @@
+1. makecert -r -pe -n "CN=CompanyXYZ" -b 01/01/2011 -e 01/01/2020 -sky exchange d:\Server_public.cer -sv d:\Server_private.pvk
+2. pvk -in d:\server.pvk -out d:\server.pem -nocrypt
+3. convert public key to pem format (https://www.sslshopper.com/ssl-converter.html).

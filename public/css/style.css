@@ -1,0 +1,29 @@
+body {
+    padding-top: 60px;
+}
+
+.center-container-long h1,
+.center-container h1 {
+    font-size: 35px;
+}
+
+.center-container-long h3,
+.center-container h3 {
+    font-size: 24px;
+}
+
+.center-container-long input,
+.center-container input {
+    font-size: 18px;
+    height: 22px;
+}
+
+.center-container-long,
+.center-container {
+    width: 500px;
+    margin: 0 auto;
+}
+
+.center-container-long {
+    width: 800px;
+}

@@ -1,0 +1,1 @@
+..\node_modules\.bin\coffee.cmd --nodejs --debug-brk ..\app.coffee

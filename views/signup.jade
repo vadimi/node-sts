@@ -1,0 +1,26 @@
+extends layout
+
+block body
+
+  include shared/form-helpers
+
+  .page-header
+    .center-container: h1 Sign Up
+
+  .center-container
+    if (locals.globalError)
+      .alert.alert-error #{globalError}
+    form.well(method='post', action='/signup')
+      fieldset
+        +textBox("userName", "User Name", "user name")
+        +textBox("email", "Email", "email", locals.errors)
+        +password("password", "Password", "password")
+        br
+        button.btn.btn-large.btn-primary(type="submit")
+          i.icon-play-circle.icon-white
+          |&nbsp;Sign Up
+
+  script(type='text/javascript')
+    $(function(){
+      $('#userName').focus();
+    });

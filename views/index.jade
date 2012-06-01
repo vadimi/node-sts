@@ -1,0 +1,24 @@
+extends layout
+
+block body
+  include shared/form-helpers
+
+  .page-header
+    .center-container: h1 What is Node.js security token service?
+
+  .center-container
+    p
+      code Node.js security token service
+      |&nbsp;is a simple security token service (STS) that is used as the authentication provider
+      |for SharePoint 2010. When users log on to the SharePoint site, they are first redirected to the logon page of
+      |the custom STS. They are redirected back to SharePoint after
+      |the authentication.
+    p
+      |More details here:&nbsp;
+      a(href="http://msdn.microsoft.com/en-us/library/ff955607.aspx") http://msdn.microsoft.com/en-us/library/ff955607.aspx
+    p
+      code Node.js security token service
+      |  is built on top of&nbsp;
+      a(href="http://nodejs.org") Node.js
+      |  and&nbsp;
+      a(href="http://www.mongodb.org/") MongoDB

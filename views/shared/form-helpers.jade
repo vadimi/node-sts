@@ -1,0 +1,21 @@
+mixin input
+  - var type = attributes.type || "text"
+  - var name = attributes.name || ""
+  - var id = attributes.id || name
+  - var label = attributes.label || ""
+  - var placeholder = attributes.placeholder || ""
+  - var error = locals.validationErrors != null ? locals.validationErrors[name] : null
+  - var klass = error != null ? 'control-group error' : ''
+  div(class=klass)
+    label(for="#{name}")
+      b= label
+    .controls
+      input.span3(id='#{id}', name='#{name}', type="#{type}", placeholder='#{placeholder}', value = locals[name])
+      if (error != null)
+        span.help-inline #{error}
+
+mixin textBox(name, label, placeholder, validationError)
+  +input()(name=name, label=label, placeholder=placeholder)
+
+mixin password(name, label, placeholder, validationError)
+  +input(name=name, type="password", label=label, placeholder=placeholder)

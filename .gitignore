@@ -1,0 +1,7 @@
+.idea
+node_modules
+logs/*
+config/*
+bin/tmp/*
+*.exe
+.nodemonignore

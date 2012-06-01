@@ -1,0 +1,61 @@
+extends layout
+
+block body
+  .page-header
+    .center-container-long: h1
+      h1
+        |All users
+        - if (locals.users)
+          |(#{users.length})
+
+  .center-container-long
+    table.table.table-bordered.table-striped(style="width: 730px")
+      cols
+        col(class="span5")
+        col(class="span5")
+        col(class="span5")
+        col(class="span2")
+      thead
+        th User Name
+        th Email
+        th Last login
+        th
+      tbody
+        - if (locals.users)
+            each user in users
+              tr
+                td= user.userName
+                td= user.email
+                td= user.lastLoginString
+                td
+                  a.btn.btn-mini.btn-success(data-toggle="modal", title="Edit",
+                    href="/users/#{user._id}/edit")
+                    i.icon-edit.icon-white
+                  &nbsp;
+                  a.btn.btn-mini.btn-danger(data-toggle="modal", title="Delete",
+                    data-user="#{user._id}", data-target="#confirmDelete")
+                    i.icon-remove.icon-white
+
+  .modal.hide.fade#confirmDelete(style="display: none")
+    .modal-header
+      button.close(data-dismiss="modal")×
+      h3 Delete user
+    form(method="POST", action="/users/delete")
+      .modal-body
+        p Are you sure you want to delete this user?
+        input#userId(type="hidden", name="userId")
+        input(type="hidden", name="_method", value="delete")
+      .modal-footer
+        a.btn(href="#", data-dismiss="modal") Cancel
+        button.btn.btn-primary(type="submit") Delete
+
+  script
+    $("a[data-target='#confirmDelete']").click(function() {
+      var userId = $(this).data('user');
+      $('#userId').val(userId);
+    });
+
+
+    $('#confirmDelete').on('hide', function () {
+      $('#userId').val('');
+    });
