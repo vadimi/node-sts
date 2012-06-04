@@ -19,6 +19,10 @@ class Conditions extends SamlElement
       audienceRC.addElement(audienceElement)
       element.addElement(audienceRC)
 
-    xml.addElement(element)
+    if xml?
+      xml.addElement(element)
+      return xml
+
+    element
 
 module.exports = Conditions

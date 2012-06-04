@@ -22,6 +22,10 @@ class AuthenticationStatement extends SubjectElement
     element.addAttr('AuthenticationMethod', @authenticationMethod)
     element.addElement(@subjectXml) if @subjectXml?
 
-    xml.addElement(element)
+    if xml?
+      xml.addElement(element)
+      return xml
+
+    element
 
 module.exports = AuthenticationStatement

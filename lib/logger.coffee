@@ -11,6 +11,7 @@ logger = new (winston.Logger)({
         date = now.format('YYYY-MM-DD HH:mm:ss')
         "[#{date}]"
       json: false
+      handleExceptions: true
       maxsize: 10485760
       filename: "#{__dirname}/../logs/log#{now.format('YYYYMMDD')}.log")
   ]

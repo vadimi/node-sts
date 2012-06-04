@@ -20,7 +20,7 @@ class SamlTokenIssuer
 
     assertion.signature = signature
     samlResponse.assertion = assertion.toXmlElement()
-    samlResponse.toXml()
+    samlResponse.toXmlString()
 
 
 

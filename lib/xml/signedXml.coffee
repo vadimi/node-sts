@@ -12,10 +12,9 @@ class SignedXml
     @digestValue = null
     @signature = null
     @reference = null
-    #@signatureValue = null
 
   getXmlString = (xml) ->
-    xml.toXml?()
+    xml.toXmlString?()
 
   computeDigest: ->
     text = getXmlString(@sourceXml)
@@ -27,95 +26,118 @@ class SignedXml
 
     signedInfo = new SignedInfo(@digestValue)
     signedInfo.reference = @reference
-    signedInfoXml = signedInfo.toXml()
+    signedInfoXml = signedInfo.writeXml().toXmlString()
     signatureValue = crypto.createSign('RSA-SHA1').update(signedInfoXml).sign(privateKey, 'base64');
 
     @signature = new Signature(signedInfo)
+    @signature.signedInfo = signedInfo
     @signature.signatureValue = signatureValue
     @signature.x509Certificate = publicKey
 
-    @signature
+    @signature.toXmlString()
 
   getSignedInfo: -> @signature
 
 # Signature element declaration
-class Signature extends XmlElement
-  constructor: (signedInfo) ->
-    super('Signature')
-    @addElement(signedInfo)
-    @namespace = 'http://www.w3.org/2000/09/xmldsig#'
+class Signature
+  constructor: ->
+    @signedInfo = null
 
-    @.__defineGetter__('signatureValue', -> @getElement('SignatureValue'))
-    @.__defineSetter__('signatureValue', (value) ->
-      signatureValueElement = new XmlElement('SignatureValue')
-      signatureValueElement.value = value
-      @setElement('SignatureValue', signatureValueElement))
+    # Signature value
+    @signatureValue = null
 
     # Publlic key to validate signature
-    @.__defineGetter__('x509Certificate', ->
-      x509Certificate = @getElement('KeyInfo')?.getElement('X509Data')?.getElement('X509Certificate')
-      x509Certificate ? null
-    )
-    @.__defineSetter__('x509Certificate', (value) ->
-      keyInfo = new XmlElement('KeyInfo')
-      x509Data = new XmlElement('X509Data')
-      x509Certificate = new XmlElement('X509Certificate')
-      x509Certificate.value = value
-      x509Data.addElement(x509Certificate)
-      keyInfo.addElement(x509Data)
-      @setElement('KeyInfo', keyInfo))
+    @x509Certificate = null
 
+  toXmlString: ->
+
+    signature = new XmlElement('Signature')
+    signature.namespace = 'http://www.w3.org/2000/09/xmldsig#'
+
+    @signedInfo.writeXml signature if @signedInfo?
+
+    signatureValueElement = new XmlElement('SignatureValue')
+    signatureValueElement.value = @signatureValue
+    signature.addElement signatureValueElement
+
+    keyInfo = new XmlElement('KeyInfo')
+    x509Data = new XmlElement('X509Data')
+    x509CertificateElement = new XmlElement('X509Certificate')
+    x509CertificateElement.value = @x509Certificate
+    x509Data.addElement(x509CertificateElement)
+    keyInfo.addElement(x509Data)
+    signature.addElement keyInfo
+
+    signature
 
 # SignedInfo element declaration
-class SignedInfo extends XmlElement
-  constructor: (digestValue) ->
-    super('SignedInfo')
-    @namespace = 'http://www.w3.org/2000/09/xmldsig#'
+class SignedInfo
+  constructor: ->
+    @reference = null
 
-    @addElement(new XmlElement('CanonicalizationMethod',
+  writeXml: (xml) ->
+    signedInfo = new XmlElement('SignedInfo')
+    signedInfo.namespace = 'http://www.w3.org/2000/09/xmldsig#'
+    signedInfo.addElement(new XmlElement('CanonicalizationMethod',
       Algorithm: 'http://www.w3.org/2001/10/xml-exc-c14n#'))
-    @addElement(new XmlElement('SignatureMethod',
+    signedInfo.addElement(new XmlElement('SignatureMethod',
       Algorithm: 'http://www.w3.org/2000/09/xmldsig#rsa-sha1'))
 
-    @.__defineGetter__('reference', -> @getElement('Reference'))
-    @.__defineSetter__('reference', (value) -> @setElement('Reference', value))
+    @reference.writeXml signedInfo if @reference?
+
+    if xml?
+      xml.addElement signedInfo
+      return xml
+
+    signedInfo
 
 # Transforms element declaration
-class TransformChain extends XmlElement
+class TransformChain
   constructor: ->
-    super('Transforms')
+    @algorithms = []
 
   # Add Transform algorithm
   add: (algorithm) ->
-    transform = new XmlElement('Transform', Algorithm: algorithm)
-    @addElement(transform)
+    @algorithms.push(algorithm)
+
+  writeXml: (xml) ->
+    transforms = new XmlElement('Transforms')
+    for algorithm in @algorithms
+      transform = new XmlElement('Transform', Algorithm: algorithm)
+      transforms.addElement(transform)
+
+    if xml?
+      xml.addElement(transforms)
+      return xml
+
+    transforms
 
 # Reference element declaration
-class Reference extends XmlElement
+class Reference
   constructor: (uri) ->
-    super('Reference')
-    @addAttr('URI', uri)
-
+    @uri = uri
     @transforms = new TransformChain()
-
-    @addElement(@transforms)
-
-    @addElement(new XmlElement('DigestMethod',
-      Algorithm: 'http://www.w3.org/2000/09/xmldsig#sha1'))
-
-    @.__defineGetter__('digestValue', -> @getElement('DigestValue'))
-    @.__defineSetter__('digestValue', (value) ->
-      digestValue = new XmlElement('DigestValue')
-      digestValue.value = value
-      @setElement('DigestValue', digestValue))
+    @digestValue = null
 
   # Add Transform algorithm
   addTransform: (algName) ->
     @transforms.add(algName)
 
-  prepareModel: ->
-    @setElement(@transforms.elementName, @transforms)
-    super
+  writeXml: (xml) ->
+    reference = new XmlElement('Reference', 'URI': @uri)
+    @transforms.writeXml(reference)
+    reference.addElement(new XmlElement('DigestMethod',
+      Algorithm: 'http://www.w3.org/2000/09/xmldsig#sha1'))
+    digestValueElement = new XmlElement('DigestValue')
+    digestValueElement.value = @digestValue
+
+    reference.addElement(digestValueElement)
+
+    if xml?
+      xml.addElement(reference)
+      return xml
+
+    reference
 
 module.exports.Reference = Reference
 module.exports.SignedXml = SignedXml

@@ -43,10 +43,10 @@ class Assertion
     xml.addElement(@signature) if @signature?
     xml
 
-  toXml: ->
+  toXmlString: ->
     xml = @toXmlElement()
     # return xml string
-    xml.toXml()
+    xml.toXmlString()
 
   generateUniqueId = ->
     id = uuid.v4().replace(/-/g, '')

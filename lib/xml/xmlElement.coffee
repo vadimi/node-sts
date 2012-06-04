@@ -80,7 +80,7 @@ class XmlElement
     model
 
   # Returns xml string
-  toXml: ->
+  toXmlString: ->
     model = @prepareModel()
     addNamespace(model, @namespace)
     return js2xml(model, @elementName, @namespace)

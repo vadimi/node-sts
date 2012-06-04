@@ -16,6 +16,11 @@ class AttributeStatement extends SubjectElement
     element = new XmlElement('AttributeStatement')
     element.addElement(@subjectXml) if @subjectXml?
     element.addElements(@attributeElements)
-    xml.addElement(element)
+
+    if xml?
+      xml.addElement(element)
+      return xml
+
+    element
 
 module.exports = AttributeStatement

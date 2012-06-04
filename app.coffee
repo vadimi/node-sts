@@ -28,12 +28,6 @@ app.configure('development', ->
   mongoose.connect(config.dbConnection)
 )
 
-app.configure('test', ->
-  app.use(express.errorHandler( dumpExceptions: true, showStack: true ))
-  app.set('view options', pretty: true)
-  mongoose.connect(config.dbConnection)
-)
-
 app.configure('production', ->
   app.use(express.errorHandler())
   app.set('view options',
