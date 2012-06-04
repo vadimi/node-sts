@@ -88,13 +88,10 @@ class UsersRoute
         next err
         return
 
-      result =
-        users: null
-        hasResult: false
+      result = users: null
 
       if users? and users.length > 0
         result.users = users
-        result.hasResult = true
 
       res.json(result)
 
