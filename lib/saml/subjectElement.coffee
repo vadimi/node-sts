@@ -12,12 +12,12 @@ class SubjectElement extends SamlElement
   Object.defineProperty @prototype, 'subjectXml',
     get: ->
       if @nameIdentifier?
-        subjElement = new XmlElement('Subject')
+        subjElement = new XmlElement 'Subject'
         niElement = new XmlElement 'NameIdentifier',
           Format: @nameIdentifier.format
           NameQualifier: ''
         niElement.value = @nameIdentifier.value
-        subjElement.addElement(niElement)
+        subjElement.addElement niElement
         return subjElement
       null
 

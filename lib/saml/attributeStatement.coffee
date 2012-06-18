@@ -6,19 +6,19 @@ class AttributeStatement extends SubjectElement
     @attributeElements = []
 
   add: (attrName, attrValue, attrNs) ->
-    attrXml = new XmlElement('Attribute', AttributeName: attrName, AttributeNamespace: attrNs)
-    attrValueXml = new XmlElement('AttributeValue')
+    attrXml = new XmlElement 'Attribute', AttributeName: attrName, AttributeNamespace: attrNs
+    attrValueXml = new XmlElement 'AttributeValue'
     attrValueXml.value = attrValue
-    attrXml.addElement(attrValueXml)
-    @attributeElements.push(attrXml)
+    attrXml.addElement attrValueXml
+    @attributeElements.push attrXml
 
   writeXml: (xml) ->
-    element = new XmlElement('AttributeStatement')
-    element.addElement(@subjectXml) if @subjectXml?
-    element.addElements(@attributeElements)
+    element = new XmlElement 'AttributeStatement'
+    element.addElement @subjectXml if @subjectXml?
+    element.addElements @attributeElements
 
     if xml?
-      xml.addElement(element)
+      xml.addElement element
       return xml
 
     element

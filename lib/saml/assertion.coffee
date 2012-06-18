@@ -32,7 +32,7 @@ class Assertion
       'MajorVersion': '1'
       'MinorVersion': '1'
 
-    conditions = new Conditions(@notBefore, @notOnOrAfter)
+    conditions = new Conditions @notBefore, @notOnOrAfter
     conditions.audience = @issuer
     conditions.writeXml xml
 
@@ -40,7 +40,7 @@ class Assertion
     for statement in @statements
       statement.writeXml xml if statement instanceof SamlElement
 
-    xml.addElement(@signature) if @signature?
+    xml.addElement @signature if @signature?
     xml
 
   toXmlString: ->

@@ -1,5 +1,5 @@
-XmlElement = require('../xml/xmlElement')
-SamlElement = require('./samlElement')
+XmlElement = require '../xml/xmlElement'
+SamlElement = require './samlElement'
 
 class Conditions extends SamlElement
   constructor: (notBefore, notOnOrAfter) ->
@@ -8,19 +8,19 @@ class Conditions extends SamlElement
     @audience = 'urn:federation:awesome'
 
   writeXml: (xml) ->
-    element = new XmlElement('Conditions')
-    element.addAttr('NotBefore', @notBefore)
-    element.addAttr('NotOnOrAfter', @notOnOrAfter)
+    element = new XmlElement 'Conditions'
+    element.addAttr 'NotBefore', @notBefore
+    element.addAttr 'NotOnOrAfter', @notOnOrAfter
 
     if @audience?
-      audienceRC = new XmlElement('AudienceRestrictionCondition')
-      audienceElement = new XmlElement('Audience')
+      audienceRC = new XmlElement 'AudienceRestrictionCondition'
+      audienceElement = new XmlElement 'Audience'
       audienceElement.value = @audience
-      audienceRC.addElement(audienceElement)
-      element.addElement(audienceRC)
+      audienceRC.addElement audienceElement
+      element.addElement audienceRC
 
     if xml?
-      xml.addElement(element)
+      xml.addElement element
       return xml
 
     element

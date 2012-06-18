@@ -3,5 +3,6 @@
     "publicKey": "./config/server_public.pem",
     "authCookieName": "stsauth",
     "dbConnection": "localhost/sts",
+    "logPath": "e:/Projects/github/node-sts/logs",
     "appPort": 3000
 }

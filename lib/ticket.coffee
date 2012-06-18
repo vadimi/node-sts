@@ -32,9 +32,9 @@ class Ticket
     attrStatement.nameIdentifier =
       format: 'http://schemas.xmlsoap.org/claims/UPN'
       value: user.userName
-    attrStatement.add('emailAddress', user.email, CLAIMS_NS)
-    attrStatement.add('UserDomain', 'NA', CLAIMS_NS)
-    attrStatement.add('upn', user.userName, CLAIMS_NS)
+    attrStatement.add 'emailAddress', user.email, CLAIMS_NS
+    attrStatement.add 'UserDomain', 'NA', CLAIMS_NS
+    attrStatement.add 'upn', user.userName, CLAIMS_NS
     attrStatement
 
 module.exports = Ticket

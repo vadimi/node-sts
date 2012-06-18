@@ -17,13 +17,13 @@ class AuthenticationStatement extends SubjectElement
     set: (value) -> @authMethod = value
 
   writeXml: (xml) ->
-    element = new XmlElement('AuthenticationStatement')
-    element.addAttr('AuthenticationInstant', @authenticationInstant)
-    element.addAttr('AuthenticationMethod', @authenticationMethod)
-    element.addElement(@subjectXml) if @subjectXml?
+    element = new XmlElement 'AuthenticationStatement'
+    element.addAttr 'AuthenticationInstant', @authenticationInstant
+    element.addAttr 'AuthenticationMethod', @authenticationMethod
+    element.addElement @subjectXml if @subjectXml?
 
     if xml?
-      xml.addElement(element)
+      xml.addElement element
       return xml
 
     element
