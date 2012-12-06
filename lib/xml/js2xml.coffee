@@ -3,7 +3,7 @@ _ = require('underscore')
 entitify = (str) ->
   str ?= ''
   str = '' + str
-  str = str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&apos;').replace(/'/g, '&quot;')
+  str = str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&apos;').replace(/"/g, '&quot;')
   str
 
 makeStartTag = (name, attr) ->
@@ -26,7 +26,7 @@ makeElement = (name, data) ->
     return element
   else if data? and typeof data is 'object'
     element += makeStartTag(name, data._attr)
-    if data._value or data._value is ''
+    if data._value? or data._value is ''
       element += entitify(data._value)
     else
       for el of data
