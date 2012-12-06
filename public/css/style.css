@@ -12,15 +12,13 @@ body {
     font-size: 24px;
 }
 
-.center-container-long input,
-.center-container input {
-    font-size: 18px;
-    height: 22px;
+.well input {
+  margin-bottom: 0;
 }
 
 .center-container-long,
 .center-container {
-    width: 500px;
+    width: 400px;
     margin: 0 auto;
 }
 
